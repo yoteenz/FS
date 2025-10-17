@@ -16,6 +16,9 @@ interface CartItem {
   lace?: string;
   styling?: string;
   addOns?: string[];
+  partSelection?: string;
+  hairline?: string;
+  // Additional properties for cart items
 }
 
 interface CartDropdownProps {

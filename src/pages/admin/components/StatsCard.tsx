@@ -6,6 +6,8 @@ interface StatsItem {
   value: string;
   /** Optional Tailwind colour class (e.g. "text-red-500") */
   color?: string;
+  highlight?: string;
+  activity?: string;
 }
 
 interface StatsCardData {

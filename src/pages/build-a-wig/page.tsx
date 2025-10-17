@@ -1033,19 +1033,18 @@ export default function BuildAWigPage() {
       setCartCount(newCartCount);
       localStorage.setItem('cartCount', newCartCount.toString());
       
+      // Save button state and the specific item ID that was added
+      setAddToBagState('added');
+      localStorage.setItem('addToBagButtonState', 'added');
+      localStorage.setItem('lastAddedItemId', cartItem.id); // Track the specific item ID
+      
+      // Small delay to ensure cart item is fully saved before any cart update events
+      setTimeout(() => {
+        // Dispatch both events after a small delay
+        window.dispatchEvent(new CustomEvent('cartCountUpdated', { detail: newCartCount }));
+        window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: JSON.parse(localStorage.getItem('cartItems') || '[]'), count: newCartCount } }));
+      }, 100);
     }
-    
-    // Save button state and the specific item ID that was added
-    setAddToBagState('added');
-    localStorage.setItem('addToBagButtonState', 'added');
-    localStorage.setItem('lastAddedItemId', cartItem.id); // Track the specific item ID
-    
-    // Small delay to ensure cart item is fully saved before any cart update events
-    setTimeout(() => {
-      // Dispatch both events after a small delay
-      window.dispatchEvent(new CustomEvent('cartCountUpdated', { detail: newCartCount }));
-      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: JSON.parse(localStorage.getItem('cartItems') || '[]'), count: newCartCount } }));
-    }, 100);
     
   };
 
