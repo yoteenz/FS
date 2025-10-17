@@ -6,7 +6,7 @@ import MobileDetector from './components/MobileDetector'
 
 function App() {
   return (
-    <BrowserRouter basename={(window as any).__BASE_PATH__ || '/'}>
+    <BrowserRouter basename="/">
       <MobileDetector />
       <Suspense fallback={<LoadingScreen />}>
         <AppRoutes />

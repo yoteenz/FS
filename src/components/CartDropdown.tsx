@@ -1,25 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  capSize?: string;
-  length?: string;
-  density?: string;
-  color?: string;
-  texture?: string;
-  lace?: string;
-  styling?: string;
-  addOns?: string[];
-  partSelection?: string;
-  hairline?: string;
-  // Additional properties for cart items
-}
+import { CartItem } from '../types/cart';
 
 interface CartDropdownProps {
   isOpen: boolean;
