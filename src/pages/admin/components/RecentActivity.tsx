@@ -461,7 +461,7 @@ export default function RecentActivity({ onViewModeChange }: RecentActivityProps
     }
   ];
 
-  const groupDates: { [key: string]: string } = {
+  const groupDates = {
     ALERTS: '2/6',
     SALES: '2/6',
     BOOKINGS: '2/6',
@@ -989,12 +989,12 @@ export default function RecentActivity({ onViewModeChange }: RecentActivityProps
                       </span>
                     </div>
 
-                    {(notification as any).amount && (
+                    {notification.amount && (
                       <span
                         className="text-sm font-bold font-futura flex-shrink-0 ml-4 tracking-wider"
                         style={{ color: '#EB1C24', opacity: 1, fontSize: '14px', fontWeight: '500' }}
                       >
-                        {(notification as any).amount}
+                        {notification.amount}
                       </span>
                     )}
                   </div>

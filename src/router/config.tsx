@@ -28,7 +28,6 @@ const BuildAWigMobilePage = lazy(() => import('../pages/build-a-wig/mobile/page'
 const BuildAWigDesktopPage = lazy(() => import('../pages/build-a-wig/desktop/page'));
 
 // Product pages
-const ProductNoirPage = lazy(() => import('../pages/product/noir/page'));
 
 // Download Center
 const DownloadCenterPage = lazy(() => import('../pages/download-center/page'));
@@ -152,10 +151,6 @@ const routes: RouteObject[] = [
   },
 
   // Product pages
-  {
-    path: '/units/noir',
-    element: <ProductNoirPage />
-  },
 
   // Admin pages - WORKING ROUTES
   {

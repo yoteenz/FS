@@ -9,14 +9,19 @@ export default function LoadingTest() {
 
   useEffect(() => {
     // Simulate content loading
-    setTimeout(() => {
+    const loadTimer = setTimeout(() => {
       setContentLoaded(true);
     }, 3000);
 
     // Force stop loading after 5 seconds maximum
-    setTimeout(() => {
+    const maxTimer = setTimeout(() => {
       setIsLoading(false);
     }, 5000);
+
+    return () => {
+      clearTimeout(loadTimer);
+      clearTimeout(maxTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -30,12 +35,12 @@ export default function LoadingTest() {
     setContentLoaded(false);
     
     // Simulate content loading
-    setTimeout(() => {
+    const loadTimer = setTimeout(() => {
       setContentLoaded(true);
     }, 3000);
 
     // Force stop loading after 5 seconds maximum
-    setTimeout(() => {
+    const maxTimer = setTimeout(() => {
       setIsLoading(false);
     }, 5000);
   };

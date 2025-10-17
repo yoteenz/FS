@@ -28,8 +28,6 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
-  console.log('CartDropdown render - isOpen:', isOpen, 'cartCount:', cartCount);
-  
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState<string>('USD');
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
@@ -213,10 +211,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
     // Update cart count
     const newCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
     localStorage.setItem('cartCount', newCount.toString());
-    
-    // Dispatch both events to ensure all components are notified
     window.dispatchEvent(new CustomEvent('cartCountUpdated', { detail: newCount }));
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: updatedItems, count: newCount } }));
   };
 
   const updateQuantity = (itemId: string, newQuantity: number) => {
@@ -234,10 +229,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
     // Update cart count
     const newCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
     localStorage.setItem('cartCount', newCount.toString());
-    
-    // Dispatch both events to ensure all components are notified
     window.dispatchEvent(new CustomEvent('cartCountUpdated', { detail: newCount }));
-    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { items: updatedItems, count: newCount } }));
   };
 
   const getTotalPrice = () => {
@@ -260,10 +252,8 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
   useEffect(() => {
     const handleBackdropClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Don't close if clicking inside cart dropdown, currency modal, or cart icon
-      if (!target.closest('[data-dropdown-content]') && 
-          !target.closest('[data-currency-modal]') &&
-          !target.closest('[data-cart-icon]')) {
+      // Don't close if clicking inside cart dropdown or currency modal
+      if (!target.closest('[data-dropdown-content]') && !target.closest('[data-currency-modal]')) {
         onClose();
       }
     };
@@ -283,7 +273,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
         zIndex: 999999999
       }}
     >
-      <div className="absolute left-4 right-4 pointer-events-auto" style={{ top: '86px' }}>
+      <div className="absolute top-20 left-4 right-4 pointer-events-auto">
         <div
           data-dropdown-content
           className="bg-white/60 backdrop-blur-md border border-black shadow-lg hover:shadow-xl transition-all duration-300 ease-out max-h-80 overflow-y-auto"
@@ -298,25 +288,33 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
         }}
       >
         {/* Header */}
-          <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between" style={{ marginTop: '6px', paddingBottom: '9px' }}>
-            <h3 
-              className="font-bold text-black uppercase" 
-              style={{ 
-                fontSize: '10px',
-                fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif'
-              }}
-            >
-              SHOPPING BAG
-            </h3>
-            <span
-              style={{ 
-                color: '#EB1C24', 
-                fontSize: '10px',
-                fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif'
-              }}
-            >
-              CURRENCY &gt; {selectedCurrency}
-            </span>
+          <div className="px-3 py-2 pb-6 flex items-center justify-center" style={{ marginTop: '6px' }}>
+            <div className="text-center">
+              <h3 
+                className="font-bold uppercase" 
+                style={{ 
+                  fontSize: '18px',
+                  fontFamily: '"Covered By Your Grace", cursive',
+                  color: '#000000',
+                  transform: 'translateY(1px)'
+                }}
+              >
+                YOUR BAG (<span style={{ color: '#EB1C24' }}>{cartCount}</span>)
+              </h3>
+              <p 
+                className="font-bold uppercase"
+                style={{ 
+                  fontSize: '11px',
+                  fontFamily: '"Futura PT Book", futuristic-pt, Futura, Inter, sans-serif',
+                  color: '#EB1C24',
+                  marginTop: '4px',
+                  transform: 'translateY(-1px)',
+                  lineHeight: '1.1'
+                }}
+              >
+                CURRENCY &gt; {selectedCurrency}
+              </p>
+            </div>
         </div>
 
         {/* Cart Items */}
@@ -325,19 +323,19 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
               <div className="text-center py-4">
               <p 
                 style={{ 
-                    fontSize: '11px',
-                  fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif',
+                    fontSize: '12px',
+                  fontFamily: '"Futura PT Book", futuristic-pt, Futura, Inter, sans-serif',
                     color: '#808080',
                     textTransform: 'uppercase'
                 }}
               >
-                  JUST DUST & LINT HERE.
+                  YOUR CART IS EMPTY
               </p>
             </div>
           ) : (
               <div className="space-y-3">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center justify-start space-x-3 pt-1 pb-4 border-b border-gray-100 last:border-b-0 min-h-[80px]">
+                  <div key={item.id} className="flex items-center justify-start space-x-3 pt-1 pb-4 border-b border-black last:border-b-0 min-h-[80px]">
                     {/* Thumbnail Container */}
                     <div className="flex flex-col items-center">
                       {/* Item Image */}
@@ -445,99 +443,72 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                           textTransform: 'uppercase',
                           fontSize: '9px',
                           marginTop: '1px',
-                          marginRight: '20px',
                           lineHeight: '1.3',
-                          wordBreak: 'break-word',
-                          maxWidth: 'calc(100% - 20px)'
+                          wordBreak: 'keep-all'
                         }}
                         dangerouslySetInnerHTML={{
                           __html: (() => {
-                          const options = [];
-                          
-                          // Build text with non-breaking spaces within comma sections
-                          let text = '';
-                          
-                          // Build array of items to determine what comes after each
-                          const items = [];
-                          if (item.density && item.density !== '200%') items.push({ type: 'density', value: item.density, fullName: `${item.density} density` });
-                          if (item.lace && item.lace !== '13X6') items.push({ type: 'lace', value: item.lace, fullName: `${item.lace} lace` });
-                          if (item.texture && item.texture !== 'SILKY') items.push({ type: 'texture', value: item.texture, fullName: item.texture });
-                          if (item.color && item.color !== 'OFF BLACK') items.push({ type: 'color', value: item.color, fullName: item.color });
-                          if (item.hairline && item.hairline !== 'NATURAL') items.push({ type: 'hairline', value: item.hairline, fullName: `${item.hairline} hairline` });
-                          if (item.styling && item.styling !== 'NONE' && item.partSelection) items.push({ type: 'styling', value: item.styling, partSelection: item.partSelection, fullName: item.styling });
-                          if (item.addOns && item.addOns.length > 0) items.push({ type: 'addOns', value: item.addOns, fullName: item.addOns });
-                          
-                          // Use full names if only 1 customizable item (excluding density and lace)
-                          const customizableItems = items.filter(item => item.type !== 'density' && item.type !== 'lace');
-                          const useFullNames = customizableItems.length === 1;
-                          
-                          // Check if density/lace are alone (no other items)
-                          const hasOtherItems = items.some(item => item.type !== 'density' && item.type !== 'lace');
-                          
-                          // Build text with proper comma placement
-                          items.forEach((itemData, index) => {
-                            const isLast = index === items.length - 1;
+                            const options = [];
                             
-                            if (itemData.type === 'density' || itemData.type === 'lace') {
-                              // Density and lace: full name if alone, abbreviated if with other items
-                              const displayValue = hasOtherItems ? itemData.value : itemData.fullName;
-                              text += (text ? ' ' : '') + displayValue;
-                            } else if (itemData.type === 'texture' || itemData.type === 'color') {
-                              // Texture and color get commas unless they're last
-                              const displayValue = useFullNames ? itemData.fullName : itemData.value;
-                              text += (text ? ' ' : '') + displayValue + (isLast ? '' : ',');
-                            } else if (itemData.type === 'hairline') {
-                              const displayValue = useFullNames ? itemData.fullName : itemData.value;
-                              text += (text ? ' ' : '') + displayValue;
+                            // Build text with non-breaking spaces within comma sections
+                            let text = '';
+                            
+                            // Add density and lace (no commas)
+                            if (item.density && item.density !== '200%') text += item.density;
+                            if (item.lace && item.lace !== '13X6') text += (text ? ' ' : '') + item.lace;
+                            
+                            // Add comma sections with non-breaking spaces
+                            if (item.texture && item.texture !== 'SILKY') {
+                              text += (text ? ' ' : '') + item.texture + ',';
+                            }
+                            if (item.color && item.color !== 'OFF BLACK') {
+                              text += (text ? ' ' : '') + item.color + ',';
+                            }
+                            if (item.hairline && item.hairline !== 'NATURAL') {
+                              text += (text ? ' ' : '') + item.hairline;
                               // Add line break after lagos to prevent text from getting too close to close button
-                              if (itemData.value.includes('LAGOS')) {
+                              if (item.hairline.includes('LAGOS')) {
                                 text += '<br/>';
                               } else {
-                                text += (isLast ? '' : ',');
+                                text += ',';
                               }
-                            } else if (itemData.type === 'styling') {
-                              if (useFullNames) {
-                                // For single item, show full styling name
-                                const displayValue = itemData.fullName;
-                                text += (text ? ' ' : '') + displayValue;
-                              } else {
-                                // For multiple items, show abbreviated with part selection
-                            let partAbbrev = '';
-                                switch (itemData.partSelection) {
-                              case 'LEFT':
-                                partAbbrev = '(L)';
-                                break;
-                              case 'RIGHT':
-                                partAbbrev = '(R)';
-                                break;
-                              case 'MIDDLE':
-                              default:
-                                partAbbrev = '(M)';
-                                break;
                             }
-                                text += (text ? ' ' : '') + partAbbrev;
                             
-                            // Use non-breaking spaces within styling section and connect to part selection
-                                const stylingText = itemData.value.replace(/ /g, '\u00A0');
-                                text += '\u00A0' + stylingText + (isLast ? '' : ',');
+                            // Add part selection, styling, and add-ons with non-breaking spaces
+                            // Only show part selection if there's actual styling (not NONE)
+                            if (item.styling && item.styling !== 'NONE' && item.partSelection) {
+                              let partAbbrev = '';
+                              switch (item.partSelection) {
+                                case 'LEFT':
+                                  partAbbrev = '(L)';
+                                  break;
+                                case 'RIGHT':
+                                  partAbbrev = '(R)';
+                                  break;
+                                case 'MIDDLE':
+                                default:
+                                  partAbbrev = '(M)';
+                                  break;
                               }
-                            } else if (itemData.type === 'addOns') {
-                              if (useFullNames) {
-                                // For single item, show full add-on names
-                                text += (text ? ' ' : '') + itemData.value.join(', ');
-                              } else {
-                                // For multiple items, show abbreviated add-ons
-                                itemData.value.forEach((addOn: string, addOnIndex: number) => {
-                              // Use non-breaking spaces within add-on section
-                              const addOnText = addOn.replace(/ /g, '\u00A0');
-                                  const isLastAddOn = addOnIndex === itemData.value.length - 1;
-                                  text += (text ? ' ' : '') + addOnText + (isLastAddOn ? '' : ',');
-                            });
-                          }
-                          }
-                          });
-                          
-                          return text;
+                              text += (text ? ' ' : '') + partAbbrev;
+                              
+                              // Use non-breaking spaces within styling section and connect to part selection
+                              const stylingText = item.styling.replace(/ /g, '\u00A0');
+                              text += '\u00A0' + stylingText + ','; // Non-breaking space between part selection and styling
+                            }
+                            if (item.addOns && item.addOns.length > 0) {
+                              item.addOns.forEach((addOn: string, index: number) => {
+                                // Use non-breaking spaces within add-on section
+                                const addOnText = addOn.replace(/ /g, '\u00A0');
+                                if (index === item.addOns.length - 1) {
+                                  text += (text ? ' ' : '') + addOnText; // No comma for last add-on
+                                } else {
+                                  text += (text ? ' ' : '') + addOnText + ',';
+                                }
+                              });
+                            }
+                            
+                            return text;
                           })()
                         }}
                       />
@@ -572,7 +543,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                           fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif',
                           color: '#000000',
                           textTransform: 'uppercase',
-                          fontSize: '13px',
+                          fontSize: '14px',
                           marginTop: (() => {
                             // Check if there's black detail text (specifications)
                             const hasSpecs = (item.density && item.density !== '200%') || 
@@ -618,9 +589,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
 
           {/* Footer with Total and Actions */}
         {cartItems.length > 0 && (
-            <div className="px-3 py-2" style={{ paddingBottom: '16px' }}>
-              {/* Separator line above footer */}
-              <div className="border-t border-gray-200 mb-2"></div>
+            <div className="px-3 py-2 border-t border-black">
             <div className="flex items-center justify-center mb-3" style={{ paddingTop: '8px' }}>
               <span 
                   className="font-bold"
@@ -661,7 +630,7 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                     textTransform: 'uppercase'
                   }}
                 >
-                  VIEW BAG
+                  VIEW CART
                 </button>
             <button
                   onClick={handleCheckout}
@@ -683,52 +652,52 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
 
         {/* Currency Modal */}
         {showCurrencyModal && (
-    <div 
+          <div
             data-currency-modal
-      className="fixed z-50"
-      style={{
-        top: '0',
-        left: '0',
-        right: '0',
-        bottom: '0',
-        zIndex: 999999999,
-        pointerEvents: 'none'
-      }}
+            className="fixed z-50"
+            style={{
+              top: '0',
+              left: '0',
+              right: '0',
+              bottom: '0',
+              zIndex: 999999999,
+              pointerEvents: 'none'
+            }}
             onClick={(e) => {
               e.stopPropagation();
               setShowCurrencyModal(false);
             }}
-    >
-      <div 
+          >
+            <div
               className="absolute bg-white border border-black p-2 shadow-lg"
-        style={{ 
-          borderWidth: '1.3px',
+              style={{
+                borderWidth: '1.3px',
                 maxHeight: '50vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-                top: '50px',
-          left: '16px',
-          right: '16px',
-          pointerEvents: 'auto'
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                top: '400px',
+                left: '16px',
+                right: '16px',
+                pointerEvents: 'auto'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
               {/* Header */}
               <div className="flex justify-between items-center mb-2 relative">
                 <div className="flex-1"></div>
-              <h3 
+                <h3 
                   className="font-bold uppercase absolute left-1/2 transform -translate-x-1/2"
-                style={{ 
+                  style={{ 
                     fontSize: '15px',
-                  fontFamily: '"Covered By Your Grace", cursive',
+                    fontFamily: '"Covered By Your Grace", cursive',
                     color: '#000000',
                     transform: 'translateX(-50%) translateY(1px)'
-                }}
-              >
-                SELECT CURRENCY
-              </h3>
-              <button
+                  }}
+                >
+                  SELECT CURRENCY
+                </h3>
+                  <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowCurrencyModal(false);
@@ -746,70 +715,70 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                     }}
                   >
                     <span style={{ fontFamily: 'Cascadia Code, monospace', fontSize: '13px' }}>×</span>
-              </button>
-            </div>
-            
+                  </button>
+              </div>
+
               {/* Scroll Indicator */}
               <div 
                 className="text-center mb-1"
                 style={{ 
                   fontSize: '8px',
                   color: '#909090',
-              fontFamily: '"Futura PT Book", futuristic-pt, Futura, Inter, sans-serif'
+                  fontFamily: '"Futura PT Book", futuristic-pt, Futura, Inter, sans-serif'
                 }}
               >
                 SCROLL TO SEE MORE
-            </div>
-            
+              </div>
+
               {/* Currency Options */}
               <div 
                 className="space-y-1 overflow-y-auto"
-                  style={{ 
-                    maxHeight: '35vh',
-                    paddingBottom: '20px'
-                  }}
-            >
-              {Object.entries(currencyRates).map(([code, currency]) => (
-                <button
-                  key={code}
+                style={{ maxHeight: '35vh' }}
+              >
+                {Object.entries(currencyRates).map(([code, currency]) => (
+                  <button
+                    key={code}
                     onClick={(e) => {
                       e.stopPropagation();
-                    setSelectedCurrency(code);
-                    setShowCurrencyModal(false);
-                  }}
+                      setSelectedCurrency(code);
+                      setShowCurrencyModal(false);
+                    }}
                     className={`w-full p-2 text-left border border-black hover:bg-gray-50 transition-colors ${
                       selectedCurrency === code ? 'bg-gray-100' : 'bg-white'
-                  }`}
-                  style={{ 
-                    borderWidth: '1.3px',
+                    }`}
+                    style={{
+                      borderWidth: '1.3px',
                       fontSize: '10px',
                       fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif',
                       color: '#000000',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  <div className="flex justify-between items-center">
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    <div className="flex justify-between items-center">
                       <span>{currency.name}</span>
                       <span style={{ fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif' }}>{currency.symbol}</span>
-                  </div>
-                  <div 
+                    </div>
+                    <div 
                       className="text-xs mt-0.5"
                       style={{ fontSize: '8px', fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif' }}
                     >
                       <span style={{ color: '#EB1C24' }}>1 USD</span>
                       <span className="text-gray-500"> = {currency.symbol}{currency.rate.toFixed(2)}</span>
                     </div>
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}
-          </div>
-        </div>
+      </div>
+      </div>
     </div>
   );
 
   // Use portal to render outside normal DOM hierarchy
   return createPortal(dropdownContent, document.body);
 }
+
+
+

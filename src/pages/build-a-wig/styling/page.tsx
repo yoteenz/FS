@@ -66,7 +66,7 @@ export default function StylingSelectionPage() {
       const item = JSON.parse(editingCartItem);
       console.log('Styling page - loading edit mode styling:', item.styling, 'part:', item.partSelection);
       if (item.styling) {
-        setSelectedHairStyling(item.styling);
+        setSelectedStyling(item.styling);
       }
       if (item.partSelection) {
         setSelectedPartSelection(item.partSelection);
