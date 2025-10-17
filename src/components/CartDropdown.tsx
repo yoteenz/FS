@@ -503,24 +503,31 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                                 text += (text ? ' ' : '') + partAbbrev;
                             
                             // Use non-breaking spaces within styling section and connect to part selection
-                                const stylingText = itemData.value.replace(/ /g, '\u00A0');
-                                text += '\u00A0' + stylingText + (isLast ? '' : ',');
+                                const stylingText = Array.isArray(itemData.value) ? itemData.value.join(' ') : itemData.value;
+                                const styledText = stylingText.replace(/ /g, '\u00A0');
+                                text += '\u00A0' + styledText + (isLast ? '' : ',');
                               }
                             } else if (itemData.type === 'addOns') {
                               if (useFullNames) {
                                 // For single item, show full add-on names
-                                text += (text ? ' ' : '') + itemData.value.join(', ');
+                                const addOnText = Array.isArray(itemData.value) ? itemData.value.join(', ') : itemData.value;
+                                text += (text ? ' ' : '') + addOnText;
                               } else {
                                 // For multiple items, show abbreviated add-ons
-                                itemData.value.forEach((addOn: string, addOnIndex: number) => {
-                              // Use non-breaking spaces within add-on section
-                              const addOnText = addOn.replace(/ /g, '\u00A0');
-                                  const isLastAddOn = addOnIndex === itemData.value.length - 1;
-                                  text += (text ? ' ' : '') + addOnText + (isLastAddOn ? '' : ',');
-                            });
-                          }
-                          }
-                          });
+                                if (Array.isArray(itemData.value)) {
+                                  itemData.value.forEach((addOn: string, addOnIndex: number) => {
+                                    // Use non-breaking spaces within add-on section
+                                    const addOnText = addOn.replace(/ /g, '\u00A0');
+                                    const isLastAddOn = addOnIndex === itemData.value.length - 1;
+                                    text += (text ? ' ' : '') + addOnText + (isLastAddOn ? '' : ',');
+                                  });
+                                } else {
+                                  // Handle single string case
+                                  const addOnText = itemData.value.replace(/ /g, '\u00A0');
+                                  text += (text ? ' ' : '') + addOnText;
+                                }
+                              }
+                            }
                           
                           return text;
                           })()
