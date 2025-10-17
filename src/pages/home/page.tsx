@@ -82,7 +82,7 @@ export default function Home() {
 
   // State placeholders for thumbnail view (actual data should be provided elsewhere)
   const [selectedView, setSelectedView] = useState(0);
-  const thumbnailImages = [];
+  const thumbnailImages: string[] = [];
 
   return (
     <div className="min-h-screen" style={{ position: 'relative' }}>

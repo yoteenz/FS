@@ -806,244 +806,28 @@ function NoirSelection() {
     }
   };
 
-  const handleConfirmSelection = () => {
-    localStorage.setItem('selectedDensity', selectedDensity);
-    localStorage.setItem('selectedDensityPrice', getSelectedPrice().toString());
+  // const handleConfirmSelection = () => {
+  //   localStorage.setItem('selectedDensity', selectedDensity);
+  //   localStorage.setItem('selectedDensityPrice', getSelectedPrice().toString());
     
-    // Store the selected cap size in localStorage for build-a-wig page
-    if (selectedCustomCap) {
-      localStorage.setItem('selectedCapSize', selectedCustomCap);
-      localStorage.setItem('selectedCapSizePrice', '0'); // Custom cap has no additional price
-    } else if (selectedFlexibleCap) {
-      localStorage.setItem('selectedCapSize', selectedFlexibleCap);
-      localStorage.setItem('selectedCapSizePrice', '60'); // Flexible cap has $60 additional price
-    }
+  //   // Store the selected cap size in localStorage for build-a-wig page
+  //   if (selectedCustomCap) {
+  //     localStorage.setItem('selectedCapSize', selectedCustomCap);
+  //     localStorage.setItem('selectedCapSizePrice', '0'); // Custom cap has no additional price
+  //   } else if (selectedFlexibleCap) {
+  //     localStorage.setItem('selectedCapSize', selectedFlexibleCap);
+  //     localStorage.setItem('selectedCapSizePrice', '60'); // Flexible cap has $60 additional price
+  //   }
     
-    navigate('/build-a-wig');
-  };
+  //   navigate('/build-a-wig');
+  // };
 
   const getSelectedPrice = () => {
     const selected = densityOptions.find(option => option.id === selectedDensity);
     return selected ? selected.price : 0;
   };
 
-  // Get dynamic density note text based on selected length and density
-  const getDensityNoteText = () => {
-    const selectedLength = localStorage.getItem('selectedLength') || '24"';
-    // Use local state instead of localStorage for live updates
-    const currentDensity = selectedDensity;
-    
-    // For 130% density, show grams based on length
-    if (currentDensity === '130%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '98',
-        '18"': '112',
-        '20"': '122',
-        '22"': '125',
-        '24"': '135',
-        '26"': '140',
-        '28"': '145',
-        '30"': '150',
-        '32"': '155',
-        '34"': '160',
-        '36"': '165',
-        '40"': '175'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '135'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 150% density, show grams based on length
-    if (currentDensity === '150%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '113',
-        '18"': '129',
-        '20"': '142',
-        '22"': '145',
-        '24"': '155',
-        '26"': '160',
-        '28"': '165',
-        '30"': '170',
-        '32"': '175',
-        '34"': '180',
-        '36"': '185',
-        '40"': '195'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '155'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 180% density, show grams based on length
-    if (currentDensity === '180%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '130',
-        '18"': '147',
-        '20"': '162',
-        '22"': '165',
-        '24"': '175',
-        '26"': '180',
-        '28"': '185',
-        '30"': '190',
-        '32"': '195',
-        '34"': '200',
-        '36"': '205',
-        '40"': '215'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '175'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 250% density, show grams based on length
-    if (currentDensity === '250%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '190',
-        '18"': '217',
-        '20"': '232',
-        '22"': '245',
-        '24"': '255',
-        '26"': '264',
-        '28"': '269',
-        '30"': '274',
-        '32"': '279',
-        '34"': '284',
-        '36"': '289',
-        '40"': '297'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '255'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 300% density, show grams based on length
-    if (currentDensity === '300%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '220',
-        '18"': '252',
-        '20"': '267',
-        '22"': '285',
-        '24"': '295',
-        '26"': '306',
-        '28"': '311',
-        '30"': '316',
-        '32"': '321',
-        '34"': '326',
-        '36"': '331',
-        '40"': '341'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '295'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 350% density, show grams based on length
-    if (currentDensity === '350%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '250',
-        '18"': '287',
-        '20"': '302',
-        '22"': '325',
-        '24"': '335',
-        '26"': '348',
-        '28"': '353',
-        '30"': '358',
-        '32"': '363',
-        '34"': '368',
-        '36"': '373',
-        '40"': '383'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '335'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 400% density, show grams based on length
-    if (currentDensity === '400%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '280',
-        '18"': '322',
-        '20"': '337',
-        '22"': '365',
-        '24"': '375',
-        '26"': '390',
-        '28"': '395',
-        '30"': '400',
-        '32"': '400',
-        '34"': '400',
-        '36"': '400',
-        '40"': '400'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '375'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For 200% density, show grams based on length
-    if (currentDensity === '200%') {
-      const lengthToGrams: { [key: string]: string } = {
-        '16"': '160',
-        '18"': '182',
-        '20"': '197',
-        '22"': '205',
-        '24"': '215',
-        '26"': '222',
-        '28"': '227',
-        '30"': '232',
-        '32"': '237',
-        '34"': '242',
-        '36"': '247',
-        '40"': '257'
-      };
-      
-      const grams = lengthToGrams[selectedLength] || '215'; // Default to 24" if not found
-      return (
-        <>
-          EQUIVALENT TO {grams} GRAMS.<br />
-          100 GRAMS = 1 BUNDLE, EXCLUDING LACE.
-        </>
-      );
-    }
-    
-    // For other densities, return default text
-    return 'PLEASE NOTE: EACH CUSTOM UNIT IS MADE TO ORDER. WE ENSURE ALL DETAILS ARE ACCURATE + PRECISE. EXPECT 6 - 8 WEEKS OF PROCESSING TIME FOR THIS UNIT.';
-  };
+  // Removed unused getDensityNoteText function
 
   const getTotalPrice = () => {
     const basePrice = 860;
@@ -1119,7 +903,7 @@ function NoirSelection() {
             <button 
               onClick={handleBack} 
               className="cursor-pointer"
-              style={{ height: '15px !important', width: '21px !important', padding: '0 !important', border: 'none !important', background: 'none !important' }}
+              style={{ height: '15px', width: '21px', padding: '0', border: 'none', background: 'none' }}
             >
               <img
                 alt="Back"
@@ -1742,26 +1526,26 @@ function NoirSelection() {
             <p
               className="text-center text-black mb-2 noir-product-name"
               style={{ 
-                fontFamily: '"Covered By Your Grace", cursive !important',
-                fontSize: '50px !important',
-                fontWeight: '400 !important',
-                lineHeight: '1.2 !important',
-                margin: '0 !important',
-                padding: '0 !important',
-                display: 'block !important',
-                textAlign: 'center !important',
-                height: 'auto !important',
-                maxHeight: 'none !important',
-                width: '100% !important',
-                minWidth: 'auto !important',
-                maxWidth: 'none !important',
-                overflow: 'visible !important',
-                whiteSpace: 'nowrap !important',
-                position: 'relative !important',
-                zIndex: '999 !important',
-                transform: 'translateY(-8px) !important',
-                scale: '1 !important',
-                zoom: '1 !important'
+                fontFamily: '"Covered By Your Grace", cursive',
+                fontSize: '50px',
+                fontWeight: '400',
+                lineHeight: '1.2',
+                margin: '0',
+                padding: '0',
+                display: 'block',
+                textAlign: 'center' as const,
+                height: 'auto',
+                maxHeight: 'none',
+                width: '100%',
+                minWidth: 'auto',
+                maxWidth: 'none',
+                overflow: 'visible',
+                whiteSpace: 'nowrap',
+                position: 'relative' as const,
+                zIndex: '999',
+                transform: 'translateY(-8px)',
+                scale: '1',
+                zoom: '1'
               }}
             >
               NOIR
@@ -1959,11 +1743,11 @@ function NoirSelection() {
                   paddingRight: '8px',
                   fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif',
                   fontWeight: '500',
-                  width: '108px !important',
-                  minWidth: '108px !important',
-                  maxWidth: '108px !important',
+                  width: '108px',
+                  minWidth: '108px',
+                  maxWidth: '108px',
                   fontSize: '11px',
-                  boxSizing: 'border-box !important',
+                  boxSizing: 'border-box' as const,
                   backgroundColor: selectedFlexibleCap === 'XXS/XS/S' ? 'white' : 'white',
                   color: selectedFlexibleCap === 'XXS/XS/S' ? '#EB1C24' : 'black',
                   cursor: 'pointer',
@@ -1986,11 +1770,11 @@ function NoirSelection() {
                   paddingRight: '8px',
                   fontFamily: '"Futura PT Medium", futuristic-pt, Futura, Inter, sans-serif',
                   fontWeight: '500',
-                  width: '108px !important',
-                  minWidth: '108px !important',
-                  maxWidth: '108px !important',
+                  width: '108px',
+                  minWidth: '108px',
+                  maxWidth: '108px',
                   fontSize: '11px',
-                  boxSizing: 'border-box !important',
+                  boxSizing: 'border-box' as const,
                   backgroundColor: selectedFlexibleCap === 'S/M/L' ? 'white' : 'white',
                   color: selectedFlexibleCap === 'S/M/L' ? '#EB1C24' : 'black',
                   cursor: 'pointer',
