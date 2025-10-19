@@ -39,6 +39,7 @@ const ComingSoonPage = lazy(() => import('../pages/coming-soon/page'));
 import LobbyPage from '../pages/lobby/page';
 import LobbyTest from '../pages/lobby/test';
 import SimpleLobby from '../pages/lobby/simple';
+import LobbyDebug from '../pages/lobby/debug';
 
 // Admin pages - ALL EXIST
 const AdminDashboard = lazy(() => import('../pages/admin/dashboard/page'));
@@ -144,7 +145,7 @@ const routes: RouteObject[] = [
   // Lobby Page
   {
     path: '/lobby',
-    element: <LobbyPage />
+    element: <LobbyDebug />
   },
 
   // Test & Demo pages - RESTORED
