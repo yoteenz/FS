@@ -18,9 +18,15 @@ export default function MobileDetector() {
       const mobile = checkMobile();
       setIsMobile(mobile);
       
-      // Auto-redirect to mobile version if on mobile device
-      if (mobile && window.location.pathname === '/') {
+      // Auto-redirect to mobile version if on mobile device (but not for lobby page)
+      if (mobile && window.location.pathname === '/' && !window.location.pathname.includes('/lobby')) {
         navigate('/build-a-wig-mobile');
+      }
+      
+      // If on lobby page, don't redirect
+      if (mobile && window.location.pathname === '/lobby') {
+        // Stay on lobby page - no redirect
+        return;
       }
     };
 

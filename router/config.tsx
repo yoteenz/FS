@@ -62,7 +62,7 @@ const routes: RouteObject[] = [
   // Main pages - UPDATED ROOT TO BUILD-A-WIG
   {
     path: '/',
-    element: <SimpleLobby />
+    element: <BuildAWigPage />
   },
   {
     path: '/home',
@@ -144,7 +144,7 @@ const routes: RouteObject[] = [
   // Lobby Page
   {
     path: '/lobby',
-    element: <SimpleLobby />
+    element: <LobbyPage />
   },
 
   // Test & Demo pages - RESTORED
