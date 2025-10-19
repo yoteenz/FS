@@ -151,6 +151,10 @@ const routes: RouteObject[] = [
     path: '/lobby-test',
     element: <LobbyDebug />
   },
+  {
+    path: '/test-simple',
+    element: <SimpleLobby />
+  },
 
   // Test & Demo pages - RESTORED
   {
