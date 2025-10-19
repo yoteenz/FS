@@ -503,14 +503,14 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                                 text += (text ? ' ' : '') + partAbbrev;
                             
                             // Use non-breaking spaces within styling section and connect to part selection
-                                const stylingText = Array.isArray(itemData.value) ? itemData.value.join(' ') : itemData.value;
+                                const stylingText = Array.isArray(itemData.value) ? itemData.value.join(' ') : String(itemData.value);
                                 const styledText = stylingText.replace(/ /g, '\u00A0');
                                 text += '\u00A0' + styledText + (isLast ? '' : ',');
                               }
                             } else if (itemData.type === 'addOns') {
                               if (useFullNames) {
                                 // For single item, show full add-on names
-                                const addOnText = Array.isArray(itemData.value) ? itemData.value.join(', ') : itemData.value;
+                                const addOnText = Array.isArray(itemData.value) ? itemData.value.join(', ') : String(itemData.value);
                                 text += (text ? ' ' : '') + addOnText;
                               } else {
                                 // For multiple items, show abbreviated add-ons
@@ -523,11 +523,12 @@ export default function CartDropdown({ isOpen, onClose, cartCount }: CartDropdow
                                   });
                                 } else {
                                   // Handle single string case
-                                  const addOnText = itemData.value.replace(/ /g, '\u00A0');
+                                  const addOnText = String(itemData.value).replace(/ /g, '\u00A0');
                                   text += (text ? ' ' : '') + addOnText;
                                 }
                               }
                             }
+                          });
                           
                           return text;
                           })()
