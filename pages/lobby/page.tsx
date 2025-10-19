@@ -3,7 +3,7 @@ import React from 'react';
 const LobbyPage: React.FC = () => {
   console.log('LobbyPage component is rendering');
   return (
-    <div className="min-h-screen bg-red-900 relative overflow-hidden">
+    <div className="min-h-screen bg-red-900 relative overflow-hidden md:hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

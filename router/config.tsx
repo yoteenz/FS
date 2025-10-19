@@ -38,6 +38,7 @@ const ComingSoonPage = lazy(() => import('../pages/coming-soon/page'));
 // Lobby Page
 import LobbyPage from '../pages/lobby/page';
 import LobbyTest from '../pages/lobby/test';
+import SimpleLobby from '../pages/lobby/simple';
 
 // Admin pages - ALL EXIST
 const AdminDashboard = lazy(() => import('../pages/admin/dashboard/page'));
@@ -61,7 +62,7 @@ const routes: RouteObject[] = [
   // Main pages - UPDATED ROOT TO BUILD-A-WIG
   {
     path: '/',
-    element: <BuildAWigPage />
+    element: <SimpleLobby />
   },
   {
     path: '/home',
@@ -143,7 +144,7 @@ const routes: RouteObject[] = [
   // Lobby Page
   {
     path: '/lobby',
-    element: <LobbyPage />
+    element: <SimpleLobby />
   },
 
   // Test & Demo pages - RESTORED
