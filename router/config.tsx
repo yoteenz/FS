@@ -36,7 +36,8 @@ const DownloadCenterPage = lazy(() => import('../pages/download-center/page'));
 const ComingSoonPage = lazy(() => import('../pages/coming-soon/page'));
 
 // Lobby Page
-const LobbyPage = lazy(() => import('../pages/lobby/page'));
+import LobbyPage from '../pages/lobby/page';
+import LobbyTest from '../pages/lobby/test';
 
 // Admin pages - ALL EXIST
 const AdminDashboard = lazy(() => import('../pages/admin/dashboard/page'));
