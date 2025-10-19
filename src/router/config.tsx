@@ -36,6 +36,11 @@ const DownloadCenterPage = lazy(() => import('../pages/download-center/page'));
 // Coming Soon Page
 const ComingSoonPage = lazy(() => import('../pages/coming-soon/page'));
 
+// Lobby Page
+import LobbyPage from '../pages/lobby/page';
+import LobbyDebug from '../pages/lobby/debug';
+import SimpleLobby from '../pages/lobby/simple';
+
 // Admin pages - ALL EXIST
 const AdminDashboard = lazy(() => import('../pages/admin/dashboard/page'));
 const AdminOverview = lazy(() => import('../pages/admin/overview/page'));
@@ -135,6 +140,20 @@ const routes: RouteObject[] = [
   {
     path: '/coming-soon',
     element: <ComingSoonPage />
+  },
+
+  // Lobby Page
+  {
+    path: '/lobby',
+    element: <LobbyDebug />
+  },
+  {
+    path: '/lobby-test',
+    element: <LobbyDebug />
+  },
+  {
+    path: '/test-simple',
+    element: <SimpleLobby />
   },
 
   // Test & Demo pages - RESTORED
